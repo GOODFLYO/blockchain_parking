@@ -1,0 +1,12 @@
+{
+  "ztoken": "0x4078f13fD4a21BF4F2d89ebbdb0A735F2fE9A934",
+  "blpl": "0xA3646F20D83CD4EB4d5cB334135fA9fc52c2D08E",
+  "blplhash": "0x6e73b69d5624900ae8f443999c9ffb283bd3e0b2916333eec67b38d47512a77d",
+
+  "Account1": "0x7eea6ac15359dcae19485e54cb3830321754ce6d",
+
+  "Account2": "0x4ce3793c86e7edbc76785ac5403fcfd817282f7c",
+
+  "holeskyrpc": "https://ethereum-holesky-rpc.publicnode.com",
+  "id": 17000
+}
