@@ -62,7 +62,7 @@ export default {
       }
     },
     async createContractWithSigner() {
-      // 代币合约信息
+      // 通证合约信息
       const zpayAddress = "0x4078f13fD4a21BF4F2d89ebbdb0A735F2fE9A934";
       const zpayABI = this.zpayABI_str;
 

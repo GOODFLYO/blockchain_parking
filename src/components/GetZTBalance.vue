@@ -1,20 +1,20 @@
 <template>
-  <div class="DeleteParkingSpace toolsView">
-    <button @click="deleteParkingSpace" class="css-button-arrow--red">
-      删除停车场
+  <div class="GetZTBalance toolsView">
+    <button @click="getZTBalance" class="css-button-arrow--red">
+      获取ZT存款
     </button>
-    <input type="text" v-model="id" placeholder="请输入要删除停车场ID" />
+    <input type="text" v-model="address" placeholder="请输入地址" />
+    <p>{{ info }}</p>
   </div>
-  <p>{{ info }}</p>
 </template>
 
 <script>
 import { ethers } from "ethers";
+
 export default {
-  name: "DeleteParkingSpace",
+  name: "GetZTBalance",
   data() {
     return {
-      id: "",
       info: "",
       address: "",
       zpayABI_str: require("../assets/zpay.json"),
@@ -58,32 +58,28 @@ export default {
       // 停车场合约信息
       const bpAddress = "0x1658A0A0Cb7f5c5908EF57B4325573f23dEf0238";
       const bpABI = this.bpABI_str;
-      console.log("---以上正确---");
 
       const wallet = new ethers.providers.Web3Provider(window.ethereum);
-      const signer = wallet.getSigner();
-
       // 创建合约实例
       const zpayContract = new ethers.Contract(zpayAddress, zpayABI, wallet);
-      const zpayContractWithSigner = zpayContract.connect(signer);
       const bpContract = new ethers.Contract(bpAddress, bpABI, wallet);
-      const bpContractWithSigner = bpContract.connect(signer);
 
-      return { zpayContractWithSigner, bpContractWithSigner };
+      return { zpayContract, bpContract };
     },
+    /* ==============不消耗gas============== */
 
-    async deleteParkingSpace() {
+    // 管理员查看合约金额(用户充值的eth)
+    async getZTBalance() {
       await this.linkWallet();
-      console.log("==========1==========");
-      const { bpContractWithSigner } = await this.createContractWithSigner();
-
+      const { bpContract } = await this.createContractWithSigner();
       try {
-        const tx = await bpContractWithSigner.deleteParkingSpace(this.id);
-        await tx.wait();
-        this.info = "删除成功";
+        console.log(this.address);
+        
+        const info = await bpContract.getZTBalance(this.address);
+        this.info = info;
       } catch (error) {
         this.info = error;
-        console.error("失败:", error);
+        console.log("获取失败:", error);
       }
     },
   },

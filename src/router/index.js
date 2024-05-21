@@ -2,7 +2,7 @@ import { createRouter, createWebHashHistory } from "vue-router";
 import Index from "../views/IndexHome.vue";
 import Register from "../views/RegisterHome.vue";
 import LinkWallet from "../views/LinkWalletHome.vue";
-import GoToUsePakingHome from "../views/GoToUsePakingHome.vue";
+import GoToUsePakingHome from "../views/GoToUseParkingHome.vue";
 
 const routes = [
   {

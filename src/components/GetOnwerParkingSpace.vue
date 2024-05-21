@@ -1,9 +1,9 @@
 <template>
-  <div class="DeleteParkingSpace toolsView">
-    <button @click="deleteParkingSpace" class="css-button-arrow--red">
-      删除停车场
+  <div class="GetOnwerParkingSpace toolsView">
+    <button @click="getOnwerParkingSpace" class="css-button-arrow--red">
+      查看拥有车位
     </button>
-    <input type="text" v-model="id" placeholder="请输入要删除停车场ID" />
+    <input type="text" v-model="id" placeholder="请输入地址" />
   </div>
   <p>{{ info }}</p>
 </template>
@@ -11,7 +11,7 @@
 <script>
 import { ethers } from "ethers";
 export default {
-  name: "DeleteParkingSpace",
+  name: "GetOnwerParkingSpace",
   data() {
     return {
       id: "",
@@ -72,15 +72,15 @@ export default {
       return { zpayContractWithSigner, bpContractWithSigner };
     },
 
-    async deleteParkingSpace() {
+    async getOnwerParkingSpace() {
       await this.linkWallet();
-      console.log("==========1==========");
       const { bpContractWithSigner } = await this.createContractWithSigner();
 
       try {
-        const tx = await bpContractWithSigner.deleteParkingSpace(this.id);
+        const tx = await bpContractWithSigner.getOnwerParikingSpace(this.id);
         await tx.wait();
-        this.info = "删除成功";
+        console.log("添加成功");
+        this.info = "添加成功";
       } catch (error) {
         this.info = error;
         console.error("失败:", error);

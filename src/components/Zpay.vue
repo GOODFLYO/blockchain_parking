@@ -1,7 +1,7 @@
 <template>
   <div class="Zpay toolsView">
     <button @click="zpay" class="css-button-arrow--red">
-      获取代币合约地址
+      获取通证合约地址
     </button>
     <p>地址是：{{ info }}</p>
   </div>
@@ -50,7 +50,7 @@ export default {
       }
     },
     async createContractWithSigner() {
-      // 代币合约信息
+      // 通证合约信息
       const zpayAddress = "0x4078f13fD4a21BF4F2d89ebbdb0A735F2fE9A934";
       const zpayABI = this.zpayABI_str;
 

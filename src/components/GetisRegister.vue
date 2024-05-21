@@ -1,19 +1,20 @@
 <template>
-  <div class="GetUserBalance toolsView">
-    <button @click="getUserBalance" class="css-button-arrow--red">
-      获取我的ZT存款
+  <div class="GetisRegister toolsView">
+    <button @click="getisRegister" class="css-button-arrow--red">
+      查看注册情况
     </button>
-    <p>{{ info }}</p>
+    <input type="text" v-model="id" placeholder="请输入地址" />
   </div>
+  <p>{{ info }}</p>
 </template>
 
 <script>
 import { ethers } from "ethers";
-
 export default {
-  name: "GetUserBalance",
+  name: "GetisRegister",
   data() {
     return {
+      id:"",
       info: "",
       address: "",
       zpayABI_str: require("../assets/zpay.json"),
@@ -50,33 +51,39 @@ export default {
       }
     },
     async createContractWithSigner() {
-      // 代币合约信息
-      const zpayAddress = "0x4078f13fD4a21BF4F2d89ebbdb0A735F2fE9A934";
+      // 通证合约信息
+      const zpayAddress = "0x1282507a50Ed1e3eF9f56d8bc626B12DB3a04641";
       const zpayABI = this.zpayABI_str;
 
       // 停车场合约信息
-      const bpAddress = "0xA3646F20D83CD4EB4d5cB334135fA9fc52c2D08E";
+      const bpAddress = "0x1658A0A0Cb7f5c5908EF57B4325573f23dEf0238";
       const bpABI = this.bpABI_str;
+      console.log("---以上正确---");
 
       const wallet = new ethers.providers.Web3Provider(window.ethereum);
+      const signer = wallet.getSigner();
+
       // 创建合约实例
       const zpayContract = new ethers.Contract(zpayAddress, zpayABI, wallet);
+      const zpayContractWithSigner = zpayContract.connect(signer);
       const bpContract = new ethers.Contract(bpAddress, bpABI, wallet);
+      const bpContractWithSigner = bpContract.connect(signer);
 
-      return { zpayContract, bpContract };
+      return { zpayContractWithSigner, bpContractWithSigner };
     },
-    /* ==============不消耗gas============== */
 
-    // 管理员查看合约金额(用户充值的eth)
-    async getUserBalance() {
+    async getisRegister() {
       await this.linkWallet();
-      const { bpContract } = await this.createContractWithSigner();
+      const { bpContractWithSigner } = await this.createContractWithSigner();
+
       try {
-        const info = await bpContract.getUserBalance();
-        this.info = info;
+        const tx = await bpContractWithSigner.getisRegister(this.id);
+        await tx.wait();
+        console.log("添加成功");
+        this.info = "添加成功";
       } catch (error) {
         this.info = error;
-        console.log("获取失败:", error);
+        console.error("失败:", error);
       }
     },
   },

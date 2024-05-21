@@ -1,20 +1,19 @@
 <template>
-  <div class="TotalPakingSpace toolsView">
-    <button @click="totalPakingSpace" class="css-button-arrow--red">
-      获取总车位
-    </button>
-    <p>{{ info }}</p>
+  <div class="ExchangeToken toolsView">
+    <button @click="exchangeToken" class="css-button-arrow--red">存款</button>
+    <input type="text" v-model="inputData" placeholder="输入存款金额" />
   </div>
+  <p>{{ success }}</p>
 </template>
 
 <script>
 import { ethers } from "ethers";
-
 export default {
-  name: "TotalPakingSpace",
+  name: "ExchangeToken",
   data() {
     return {
-      info: "",
+      success: "",
+      inputData: 0,
       address: "",
       zpayABI_str: require("../assets/zpay.json"),
       bpABI_str: require("../assets/blockchainParking.json"),
@@ -50,33 +49,42 @@ export default {
       }
     },
     async createContractWithSigner() {
-      // 代币合约信息
-      const zpayAddress = "0x4078f13fD4a21BF4F2d89ebbdb0A735F2fE9A934";
+      // 通证合约信息
+      const zpayAddress = "0x1282507a50Ed1e3eF9f56d8bc626B12DB3a04641";
       const zpayABI = this.zpayABI_str;
 
       // 停车场合约信息
-      const bpAddress = "0xA3646F20D83CD4EB4d5cB334135fA9fc52c2D08E";
+      const bpAddress = "0x1658A0A0Cb7f5c5908EF57B4325573f23dEf0238";
       const bpABI = this.bpABI_str;
 
       const wallet = new ethers.providers.Web3Provider(window.ethereum);
+      const signer = wallet.getSigner();
+
       // 创建合约实例
       const zpayContract = new ethers.Contract(zpayAddress, zpayABI, wallet);
+      const zpayContractWithSigner = zpayContract.connect(signer);
       const bpContract = new ethers.Contract(bpAddress, bpABI, wallet);
+      const bpContractWithSigner = bpContract.connect(signer);
 
-      return { zpayContract, bpContract };
+      return { zpayContractWithSigner, bpContractWithSigner };
     },
-    /* ==============不消耗gas============== */
 
-    // 管理员查看合约金额(用户充值的eth)
-    async totalPakingSpace() {
+    async exchangeToken() {
       await this.linkWallet();
-      const { bpContract } = await this.createContractWithSigner();
+      const { bpContractWithSigner } = await this.createContractWithSigner();
+
       try {
-        const info = await bpContract.totalParkingSpace();
-        this.info = info;
-        console.log(info);
+        console.log(this.inputData);
+        const tx = await bpContractWithSigner.exchangeToken({
+          value: this.inputData,
+        });
+
+        await tx.wait();
+        this.success = "恭喜你 存款成功！";
+        console.log("存款成功");
       } catch (error) {
-        console.log("获取失败:", error);
+        this.success = error;
+        console.error("存款失败:", error);
       }
     },
   },

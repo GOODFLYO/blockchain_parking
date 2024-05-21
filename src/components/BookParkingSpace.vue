@@ -59,12 +59,12 @@ export default {
       }
     },
     async createContractWithSigner() {
-      // 代币合约信息
-      const zpayAddress = "0x4078f13fD4a21BF4F2d89ebbdb0A735F2fE9A934";
+      // 通证合约信息
+      const zpayAddress = "0x1282507a50Ed1e3eF9f56d8bc626B12DB3a04641";
       const zpayABI = this.zpayABI_str;
 
       // 停车场合约信息
-      const bpAddress = "0xA3646F20D83CD4EB4d5cB334135fA9fc52c2D08E";
+      const bpAddress = "0x1658A0A0Cb7f5c5908EF57B4325573f23dEf0238";
       const bpABI = this.bpABI_str;
       console.log("---以上正确---");
 
